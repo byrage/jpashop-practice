@@ -1,7 +1,12 @@
 package com.github.byrage.jpashop.domain;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
 
+@Getter
+@Setter
 @Entity
 public class Delivery {
 
@@ -9,7 +14,7 @@ public class Delivery {
     @GeneratedValue
     @Column(name = "delivery_id")
     private Long id;
-    @OneToOne(mappedBy = "delivery")
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "delivery")
     private Order order;
     @Embedded
     private Address address;

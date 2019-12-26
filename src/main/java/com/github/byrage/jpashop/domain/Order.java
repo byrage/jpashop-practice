@@ -1,11 +1,16 @@
 package com.github.byrage.jpashop.domain;
 
+import com.github.byrage.jpashop.util.LocalDateTimeUtils;
+import lombok.*;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
+@Getter
+@Setter(AccessLevel.PRIVATE)
 @Entity
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "orders")
 public class Order {
 
@@ -45,4 +50,26 @@ public class Order {
         delivery.setOrder(this);
     }
 
+    public static Order createOrder(Member member, Delivery delivery, OrderItem... orderItems) {
+        Order order = new Order();
+        order.setMember(member);
+        order.setDelivery(delivery);
+        Arrays.stream(orderItems).forEach(order::addOrderItems);
+        order.setStatus(OrderStatus.ORDER);
+        order.setOrderDateTime(LocalDateTimeUtils.now());
+
+        return order;
+    }
+
+    public void cancel() {
+        if (DeliveryStatus.COMP == delivery.getStatus()) {
+            throw new IllegalStateException("배송 시작된 상품은 취소가 불가능합니다.");
+        }
+        this.setStatus(OrderStatus.CANCEL);
+        this.orderItems.forEach(OrderItem::cancel);
+    }
+
+    public long getTotalPrice() {
+        return this.orderItems.stream().mapToLong(OrderItem::getTotalPrice).sum();
+    }
 }

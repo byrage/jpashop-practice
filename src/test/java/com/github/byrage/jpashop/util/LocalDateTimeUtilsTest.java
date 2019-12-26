@@ -1,9 +1,7 @@
 package com.github.byrage.jpashop.util;
 
-import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.*;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import static org.assertj.core.api.Assertions.assertThat;

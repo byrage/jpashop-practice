@@ -24,7 +24,7 @@ public class MemberService {
 
     @Transactional(readOnly = true)
     public Member findOne(Long id) {
-        return memberRepository.findById(id);
+        return memberRepository.findOne(id);
     }
 
     private void validateDuplicate(Member member) {

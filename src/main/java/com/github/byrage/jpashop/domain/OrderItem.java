@@ -1,15 +1,14 @@
 package com.github.byrage.jpashop.domain;
 
 import com.github.byrage.jpashop.domain.item.Item;
-import lombok.Getter;
-import lombok.Setter;
-import org.springframework.stereotype.Service;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Getter
 @Setter
 @Entity
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class OrderItem {
 
     @Id
@@ -28,4 +27,22 @@ public class OrderItem {
     private long orderPrice;
 
     private long count;
+
+    public void cancel() {
+        this.item.addStockQuantity(this.count);
+    }
+
+    public static OrderItem createOrderItem(Item item, long orderPrice, long count) {
+        OrderItem orderItem = new OrderItem();
+        orderItem.setItem(item);
+        orderItem.setOrderPrice(orderPrice);
+        orderItem.setCount(count);
+        item.cutStockQuantity(count);
+
+        return orderItem;
+    }
+
+    public long getTotalPrice() {
+        return getOrderPrice() * getCount();
+    }
 }

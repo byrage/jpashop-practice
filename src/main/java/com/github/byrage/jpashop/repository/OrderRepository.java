@@ -5,11 +5,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
+import java.util.List;
 
 @Repository
 @RequiredArgsConstructor
 public class OrderRepository {
 
+    private static final int MAX_RESULT = 1000;
     private final EntityManager em;
 
     public Long save(Order order) {
@@ -21,5 +23,13 @@ public class OrderRepository {
         return em.find(Order.class, orderId);
     }
 
-//    public List<Order> findAll(OrderSearch orderSearch){}
+    public List<Order> findByOrderSearch(OrderSearch orderSearch) {
+        return em.createQuery("select o from Order o join o.member m"
+                + "where o.status = :status"
+                + "and m.name like :name", Order.class)
+                .setParameter("status", orderSearch.getOrderStatus())
+                .setParameter("nmae", orderSearch.getMemberName())
+                .setMaxResults(MAX_RESULT)
+                .getResultList();
+    }
 }

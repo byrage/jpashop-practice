@@ -21,7 +21,7 @@ class MemberServiceTest {
         Member member = new Member();
         member.setName("ywchoi");
 
-        Long savedId = memberService.join(member);
+        Long savedId = memberService.create(member);
 
         assertThat(memberService.findOne(savedId)).isEqualTo(member);
     }
@@ -33,8 +33,8 @@ class MemberServiceTest {
         Member member2 = new Member();
         member2.setName("ywchoi");
 
-        memberService.join(member1);
-        assertThatThrownBy(() -> memberService.join(member2))
+        memberService.create(member1);
+        assertThatThrownBy(() -> memberService.create(member2))
                 .isInstanceOf(IllegalStateException.class);
     }
 }

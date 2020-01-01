@@ -10,21 +10,25 @@ import org.springframework.util.CollectionUtils;
 import java.util.List;
 
 @Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class MemberService {
 
     private final MemberRepository memberRepository;
 
     @Transactional
-    public Long join(Member member) {
+    public Long create(Member member) {
         validateDuplicate(member);
         memberRepository.createMember(member);
         return member.getId();
     }
 
-    @Transactional(readOnly = true)
     public Member findOne(Long id) {
         return memberRepository.findOne(id);
+    }
+
+    public List<Member> findAll() {
+        return memberRepository.findAll();
     }
 
     private void validateDuplicate(Member member) {

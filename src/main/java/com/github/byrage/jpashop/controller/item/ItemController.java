@@ -55,7 +55,7 @@ public class ItemController {
     @PostMapping("/{itemId}/edit")
     public String edit(@PathVariable Long itemId, BookForm bookForm) {
         Item shouldEditItem = bookForm.convertToEntity(itemId);
-        itemService.save(shouldEditItem);
+        itemService.update(shouldEditItem);
         return "redirect:/items";
     }
 }

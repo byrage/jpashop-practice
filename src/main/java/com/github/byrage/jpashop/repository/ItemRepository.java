@@ -14,11 +14,6 @@ public class ItemRepository {
     private final EntityManager em;
 
     public Long save(Item item) {
-        if (item.getId() != null) {
-            em.merge(item);
-            return item.getId();
-        }
-
         em.persist(item);
         return item.getId();
     }
